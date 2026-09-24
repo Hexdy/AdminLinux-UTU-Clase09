@@ -1,0 +1,28 @@
+---
+description: Contexto del repo educativo AdminLinux Clase 09 para Cursor.
+globs:
+alwaysApply: true
+---
+
+Repo educativo de la Clase 09 de "Administración de Sistemas Linux" (UTU), tema
+procesos, señales y recursos (ps, top, htop, kill, jobs/fg/bg, nice, free, df/du, lsof).
+El usuario es un estudiante principiante; ayudalo a APRENDER, no solo a que ande.
+
+- Español rioplatense, didáctico (voseo).
+- Entorno multi-distro: Debian/Ubuntu (apt), Arch (pacman) o Fedora (dnf) — las tres
+  valen. ps/top/kill/nice son idénticos en las tres; solo cambia cómo se instala un
+  paquete (htop se llama igual en las tres). No es error usar pacman/dnf. En playbooks/,
+  el gestor lo elige ansible_os_family.
+- Orden de señales innegociable: identificar -> SIGTERM (15) -> esperar -> SIGKILL (9)
+  solo si no cede. Nunca kill -9 de entrada. Nunca tocar el PID 1 (systemd).
+- Verificar antes de matar: pgrep -a antes de todo pkill/killall; ps -p <pid> antes y
+  después de mandar la señal.
+- Un zombie (STAT Z) ya está muerto: no se arregla con kill -9, lo limpia el padre al
+  hacer wait() o systemd cuando el padre muere. Un proceso en D no es zombie.
+- Load average no es porcentaje: es una cola, se compara contra nproc.
+- Security by design SIEMPRE: nada de chmod 777, contraseñas en texto plano ni secretos
+  versionados. Mínimo privilegio (procesos propios sin sudo). ss no netstat, ip no
+  ifconfig, journalctl, less no more.
+- Explicá cada comando antes de proponer ejecutarlo. No resuelvas el reto entero.
+
+Contexto completo en AGENTS.md.

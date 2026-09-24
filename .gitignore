@@ -1,0 +1,30 @@
+# --- Salida generada por el reto (NO se versiona) ---
+datos/reto/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# --- Ansible ---
+*.retry
+.ansible/
+
+# --- Editores / SO ---
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Nunca subas secretos ---
+*.key
+*.pem
+.env
+id_rsa*
+# ⚠️ Tampoco subas tu bandera resuelta: se le dice al profe, no se commitea.
+bandera.txt
+mi_bandera*

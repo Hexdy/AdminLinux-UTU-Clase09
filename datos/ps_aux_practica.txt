@@ -1,0 +1,32 @@
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.4 168404 12680 ?        Ss   09:02   0:03 /sbin/init splash
+root         2  0.0  0.0      0     0 ?        S    09:02   0:00 [kthreadd]
+root       318  0.0  0.2  95140  8204 ?        S<s  09:02   0:00 /lib/systemd/systemd-journald
+root       402  0.0  0.1  23044  6112 ?        Ss   09:02   0:00 /lib/systemd/systemd-udevd
+systemd+   611  0.0  0.1  16180  5944 ?        Ss   09:02   0:00 /lib/systemd/systemd-resolved
+message+   730  0.0  0.1   9180  4520 ?        Ss   09:03   0:01 /usr/bin/dbus-daemon --system
+root       742  0.0  0.3 246880 11408 ?        Ssl  09:03   0:02 /usr/sbin/NetworkManager --no-daemon
+root       818  0.0  0.1  15420  6740 ?        Ss   09:03   0:00 /usr/sbin/sshd -D
+root       905  0.0  0.2 308220  9612 ?        Ssl  09:03   0:00 /usr/sbin/cron -f
+www-data  1102  0.3  0.6  72140 24880 ?        S    09:05   0:12 nginx: worker process
+www-data  1103  0.2  0.6  72140 24612 ?        S    09:05   0:09 nginx: worker process
+postgres  1240  1.1  4.2 412660 86420 ?        Ss   09:06   0:41 /usr/lib/postgresql/15/bin/postgres
+postgres  1288  0.4  1.8 414200 37100 ?        Ss   09:06   0:07 postgres: checkpointer
+postgres  1291  0.2  0.9 414200 19040 ?        Ss   09:06   0:03 postgres: walwriter
+ulyses    1502  0.0  0.1  12180  5080 pts/0    Ss   09:10   0:00 -bash
+ulyses    1577  0.0  0.1  12184  5120 pts/1    Ss   09:11   0:00 -bash
+ulyses    1610  2.4  3.1 998420 63280 ?        Sl   09:12   1:02 /usr/lib/firefox/firefox
+ulyses    1644  1.7  2.2 884100 45180 ?        Sl   09:12   0:44 /usr/lib/firefox/firefox -contentproc
+ulyses    1702  0.9  1.4 712400 28640 ?        Sl   09:14   0:21 /usr/share/code/code --type=renderer
+ulyses    1810  0.1  0.3  88240  7120 pts/0    S    09:20   0:01 tmux: server
+ulyses    1877 63.5  0.9 220480 18320 pts/1    R    09:44   4:18 python3 entrenar_modelo.py --epochs 40
+ulyses    1901  0.0  0.0      0     0 pts/1    Z    09:45   0:00 [convertir_csv] <defunct>
+ulyses    1902  0.0  0.0      0     0 pts/1    Z    09:45   0:00 [convertir_csv] <defunct>
+ulyses    1944  9.8  0.5 141220 10480 pts/0    R    09:51   0:33 ffmpeg -i clase09.mkv -c:v libx264 salida.mp4
+ulyses    1980  0.0  0.2  21400  4980 pts/0    T    09:53   0:00 vim informe_incidente.md
+backup    2011  4.2  0.2  19880  4420 ?        D    09:55   0:14 rsync -a /datos/ /mnt/respaldo/
+backup    2012  0.6  0.1  11240  3180 ?        S    09:55   0:02 rsync -a /datos/ /mnt/respaldo/
+mysql     2140  7.9  6.8 1284400 139200 ?      Ssl  09:57   0:26 /usr/sbin/mariadbd
+redis     2201  0.5  0.4  62840  8940 ?        Ssl  09:58   0:02 /usr/bin/redis-server 127.0.0.1:6379
+root      2260  0.0  0.1  14320  4060 ?        Ss   09:59   0:00 /usr/sbin/atd -f
+ulyses    2301  0.0  0.1  12660  3980 pts/0    R+   10:02   0:00 ps aux

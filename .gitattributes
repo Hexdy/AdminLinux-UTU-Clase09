@@ -1,0 +1,20 @@
+# .gitattributes — normaliza finales de línea
+# Regla de oro: en el repo TODO va con LF (estilo Unix).
+* text=auto eol=lf
+
+# Scripts y config que SIEMPRE tienen que ser LF (si les entra CRLF, Linux
+# tira errores raros tipo  $'\r': command not found )
+*.sh      text eol=lf
+*.yml     text eol=lf
+*.yaml    text eol=lf
+*.j2      text eol=lf
+*.cfg     text eol=lf
+*.ini     text eol=lf
+*.md      text eol=lf
+*.txt     text eol=lf
+
+# Binarios: que git no los toque
+*.png     binary
+*.jpg     binary
+*.pdf     binary
+*.pptx    binary

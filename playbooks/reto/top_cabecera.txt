@@ -1,0 +1,4 @@
+top - 02:47:11 up 23 days,  4:02,  2 users,  load average: 19.84, 17.02, 11.35
+%Cpu(s): 71.2 us,  6.4 sy,  0.0 ni,  3.1 id, 18.9 wa,  0.0 hi,  0.4 si,  0.0 st
+MiB Mem :   7976.0 total,    268.4 free,   6944.2 used,    763.4 buff/cache
+MiB Swap:   2048.0 total,     92.6 free,   1955.4 used.    431.8 avail Mem

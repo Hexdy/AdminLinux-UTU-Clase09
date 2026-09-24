@@ -1,0 +1,48 @@
+USER       PID %CPU %MEM     VSZ    RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.1  169112  12384 ?        Ss   ago03  12:41 /sbin/init splash
+root         2  0.0  0.0       0      0 ?        S    ago03   0:02 [kthreadd]
+root         9  0.0  0.0       0      0 ?        I<   ago03   0:00 [mm_percpu_wq]
+root        14  0.1  0.0       0      0 ?        S    ago03   8:19 [ksoftirqd/0]
+root        31  0.0  0.0       0      0 ?        S    ago03   0:44 [kswapd0]
+root       112  0.0  0.0       0      0 ?        D    ago03   3:07 [jbd2/sda1-8]
+root       113  0.0  0.0       0      0 ?        D    ago03   0:22 [jbd2/sdb1-8]
+root       418  0.0  0.3   84120  25904 ?        Ss   ago03   0:58 /lib/systemd/systemd-journald
+root       501  0.0  0.1   24880   8112 ?        Ss   ago03   0:11 /lib/systemd/systemd-udevd
+systemd+   702  0.0  0.1   16276   7420 ?        Ss   ago03   0:33 /lib/systemd/systemd-resolved
+root       841  0.0  0.1   12188   6904 ?        Ss   ago03   1:22 /usr/sbin/cron -f
+root       912  0.0  0.1   15420   9128 ?        Ss   ago03   0:47 /usr/sbin/sshd -D
+root      1102  0.2  0.4  712344  34980 ?        Ssl  ago03  21:05 /usr/bin/containerd
+root      1340  0.0  0.2  121560  16240 ?        Ss   ago03   2:14 nginx: master process /usr/sbin/nginx
+www-data  1341  1.8  0.5  122980  41208 ?        S    ago03  55:12 nginx: worker process
+www-data  1342  2.1  0.5  122980  42136 ?        S    ago03  58:40 nginx: worker process
+www-data  1343  1.9  0.5  122984  41880 ?        S    ago03  56:29 nginx: worker process
+www-data  1344 24.1  0.6  123504  48772 ?        R    ago03  61:03 nginx: worker process
+postgres  1588  0.4  2.1 1284560 172344 ?        Ss   ago03  14:52 /usr/lib/postgresql/15/bin/postgres
+postgres  1602  0.1  0.6 1284700  52108 ?        Ss   ago03   3:31 postgres: checkpointer
+postgres  1603  0.0  0.3 1284560  27416 ?        Ss   ago03   1:09 postgres: background writer
+postgres  1611  0.0  0.3 1284560  25980 ?        Ss   ago03   0:58 postgres: walwriter
+postgres  2044  6.7  1.4 1291204 118372 ?        D    09:12  12:18 postgres: facturacion app 10.0.2.14(52310) SELECT
+postgres  2045  5.9  1.3 1291080 112904 ?        D    09:12  11:02 postgres: facturacion app 10.0.2.14(52311) SELECT
+postgres  2046  0.9  0.7 1288940  61220 ?        S    09:13   1:47 postgres: facturacion app 10.0.2.14(52312) idle
+redis     1755  0.7  0.4   62340  33208 ?        Ssl  ago03  18:23 /usr/bin/redis-server 127.0.0.1:6379
+root      1801  0.3  0.9 1428300  74512 ?        Ssl  ago03  25:44 /usr/bin/dockerd -H fd://
+ana       2841  0.0  0.1   17368   9840 ?        Ss   08:57   0:00 sshd: ana [priv]
+ana       2842  0.0  0.1    9284   5620 pts/0    Ss   08:57   0:01 -bash
+ana       2843  0.0  0.1   17368   9120 ?        S    09:01   0:00 sshd: ana@pts/1
+ana       2844  0.0  0.1    9284   5480 pts/1    Ss+  09:01   0:00 -bash
+root      3051  0.1  0.2   38120  18604 ?        Ss   ago03   4:12 /usr/bin/python3 /usr/bin/fail2ban-server
+root      3190  0.0  0.1   11276   3980 pts/0    R+   02:47   0:00 ps aux
+root      3417 187.4  8.2 2984120 668432 ?       R    02:15 512:44 /usr/bin/python3 /opt/facturacion/exportar_lote.py --mes 09
+root      3418  0.0  0.0       0      0 ?        Z    02:15   0:00 [exportar_lote] <defunct>
+root      3419  0.0  0.0       0      0 ?        Z    02:16   0:00 [exportar_lote] <defunct>
+root      3420  0.0  0.0       0      0 ?        Z    02:18   0:00 [exportar_lote] <defunct>
+root      3421  0.0  0.0       0      0 ?        Z    02:21   0:00 [exportar_lote] <defunct>
+root      3502  0.0  0.1   14320   7208 ?        S    02:30   0:03 /usr/bin/python3 /opt/facturacion/watchdog.py
+ana       3611  3.4  0.9 1092400  78320 ?        Sl   01:40   4:55 /opt/monitor/agente-metricas --interval 10
+root      3705  0.0  0.1   19844   8960 ?        Ss   ago03   0:26 /usr/sbin/rsyslogd -n -iNONE
+root      3801  0.2  0.3   95160  24880 ?        Ssl  ago03   6:40 /usr/bin/unattended-upgrade
+backup    3912  0.0  0.0    8320   3116 ?        T    03:00   0:00 /opt/backup/rsync_nocturno.sh
+backup    3913  0.0  0.0   12040   4208 ?        D    03:00   0:41 rsync -a --delete /var/lib/app/ /mnt/nas/app/
+root      4102  0.0  0.1   13980   7440 ?        Ss   ago03   0:18 /usr/lib/postfix/sbin/master
+root      4455  0.1  0.2   27104  15620 ?        Ssl  01:12   0:09 /usr/bin/python3 /opt/inventario/scan.py
+ana       4612  0.6  0.4   88420  36180 pts/1    Sl+  02:45   0:22 htop

@@ -1,0 +1,52 @@
+---
+# comprobar_bandera.yml — ¿tu bandera es la correcta?
+#
+# SECURITY BY DESIGN: el repo NO guarda la bandera en texto plano. Guarda solo su
+# huella SHA-256 en  secretos/bandera.sha256. Este playbook calcula la huella de
+# LO QUE VOS PASÁS y la compara con la esperada. Si coinciden, la bandera es válida.
+# Es la misma idea con la que se guardan las contraseñas: nunca el secreto, solo su
+# hash (para contraseñas de verdad, además, se usa hashing lento con sal: bcrypt/argon2).
+#
+# Uso:
+#   ansible-playbook comprobar_bandera.yml -e "bandera=BANDERA{...}"
+#
+# Formato: tres valores, guion como separador, sin espacios:
+#   BANDERA{<pid_culpable>-<cantidad_zombies>-<numero_senal>}
+
+- name: Verificar la bandera del reto (por hash, sin exponer el secreto)
+  hosts: local
+  become: false
+  gather_facts: false
+
+  vars:
+    bandera: ""   # la pasás con  -e "bandera=BANDERA{...}"
+
+  tasks:
+    - name: Necesito que me pases una bandera
+      ansible.builtin.assert:
+        that:
+          - bandera | length > 0
+        fail_msg: >-
+          Pasame tu bandera así:
+          ansible-playbook comprobar_bandera.yml -e "bandera=BANDERA{...}"
+        quiet: true
+
+    - name: Leer la huella esperada (solo el hash vive en el repo)
+      ansible.builtin.set_fact:
+        hash_esperado: "{{ lookup('file', playbook_dir + '/secretos/bandera.sha256') | trim }}"
+
+    - name: Comparar la huella de tu bandera con la esperada
+      ansible.builtin.assert:
+        that:
+          - (bandera | trim | hash('sha256')) == hash_esperado
+        fail_msg: >-
+          ❌ Esa no es. Revisá cada dato sobre ps_aux_reto.txt: ¿salteaste el
+          encabezado?, ¿ordenaste por la columna 3 (%CPU) de forma numérica?,
+          ¿contaste SOLO los STAT de la columna 8 que empiezan con Z (y no los D)?,
+          ¿pusiste el número de la señal ORDENADA y no el de la brutal?
+        success_msg: "✅ ¡BANDERA CORRECTA! Diagnosticaste el incidente vos solo/a. 🎉"
+        quiet: true
+
+    - name: Trofeo
+      ansible.builtin.debug:
+        msg: "🏁 {{ bandera | trim }} — capturada leyendo procesos y verificada con Ansible."

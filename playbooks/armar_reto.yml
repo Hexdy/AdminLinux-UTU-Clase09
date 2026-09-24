@@ -1,0 +1,129 @@
+---
+# armar_reto.yml — Desplegá tu estación de guardia para el post-mortem.
+# MULTI-DISTRO: Debian/Ubuntu (apt) · Arch (pacman) · Fedora/RHEL (dnf).
+#
+# ESCENARIO (no es hacking, es laburo de sysadmin/SRE): un servidor se cayó de
+# madrugada y lo reiniciaron. Te quedó la FOTO FORENSE que alcanzó a guardar la
+# guardia nocturna. Este playbook te arma el entorno para analizarla:
+#   1) Comprueba que tu distro esté soportada.
+#   2) Instala htop con el módulo genérico 'package' (usa apt, pacman o dnf).
+#   3) Crea el área de trabajo  datos/reto/          (módulo file).
+#   4) Copia el volcado que dejó la guardia: ps aux + cabecera de top (módulo copy).
+#   5) Genera una MISION.txt personalizada con TUS datos  (módulo template + facts).
+#   6) Deja la nota de la guardia con permisos 0600 = solo su dueño  (security by design).
+#
+# La gracia de Ansible: el MISMO playbook arma el laboratorio en Ubuntu, Arch o
+# Fedora sin que cambies una línea. Y es IDEMPOTENTE: corrélo mil veces, siempre
+# deja el entorno igual (2ª corrida = changed=0).
+#
+# Con una sola VM alcanza: corre todo contra localhost (grupo [local]).
+#
+# ¿No tenés Ansible? Corré primero:   bash comprobar_requisitos.sh
+#
+# Simular sin aplicar (RECOMENDADO la 1ª vez):
+#   ansible-playbook armar_reto.yml -l local --check --diff
+# Aplicar de verdad:
+#   ansible-playbook armar_reto.yml -l local
+#   (si al instalar htop te pide contraseña de sudo, agregá  -K)
+
+- name: Armar la estación de guardia del post-mortem (Debian/Ubuntu + Arch + Fedora)
+  hosts: local
+  become: false
+
+  vars:
+    # true = instala htop (necesita sudo; agregá -K si te pide contraseña).
+    # Poné false si ya lo tenés o no querés usar sudo: el reto funciona igual.
+    instalar_htop: true
+    area: "{{ playbook_dir }}/../datos/reto"
+
+  pre_tasks:
+    # Si tu distro no es de estas 3 familias, el playbook se detiene ACÁ y te lo
+    # explica (en vez de romper a la mitad).
+    - name: Comprobar que la distribución está soportada
+      ansible.builtin.assert:
+        that:
+          - ansible_os_family in ['Debian', 'Archlinux', 'RedHat']
+        fail_msg: >-
+          Distro no soportada: {{ ansible_distribution }}
+          (familia {{ ansible_os_family }}). Este material corre en Debian/Ubuntu
+          (gestor apt), Arch (gestor pacman) y Fedora/RHEL (gestor dnf). Buena
+          noticia: el paquete 'htop' se llama IGUAL en las tres.
+        success_msg: >-
+          Distro soportada: {{ ansible_distribution }} ({{ ansible_os_family }}).
+        quiet: true
+
+    # UN solo módulo, TRES gestores: 'package' elige apt / pacman / dnf por vos.
+    # Va envuelto en block/rescue: si el gestor falla (sin red, sin sudo, repo
+    # caído), te avisa y el reto sigue funcionando igual.
+    - name: Instalar htop de forma tolerante a fallos
+      block:
+        - name: Instalar htop (el mismo módulo usa apt, pacman o dnf según tu distro)
+          ansible.builtin.package:
+            name: htop
+            state: present
+          become: true
+          when: instalar_htop | bool
+      rescue:
+        - name: Avisar que htop no se pudo instalar (el reto sigue igual)
+          ansible.builtin.debug:
+            msg: >-
+              No se pudo instalar htop ({{ ansible_distribution }}). Puede ser
+              falta de red, de sudo (-K) o un repo caído. No pasa nada: el reto
+              se resuelve con ps, que ya viene en tu sistema. Instalalo después
+              con apt / pacman / dnf.
+
+  tasks:
+    - name: Crear el área de trabajo del post-mortem
+      ansible.builtin.file:
+        path: "{{ area }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copiar la foto forense que dejó la guardia (ps aux + cabecera de top)
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/reto/{{ item }}"
+        dest: "{{ area }}/{{ item }}"
+        mode: '0644'
+      loop:
+        - ps_aux_reto.txt
+        - top_cabecera.txt
+
+    - name: Generar TU misión personalizada (módulo template + facts)
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/templates/mision.txt.j2"
+        dest: "{{ area }}/MISION.txt"
+        mode: '0644'
+
+    - name: Dejar la nota de la guardia y asegurarla (0600 = solo su dueño)
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/reto/nota_guardia.txt"
+        dest: "{{ area }}/nota_guardia.txt"
+        mode: '0600'
+
+  post_tasks:
+    # "Verificar antes de confiar": mostramos cuántas líneas quedaron listas.
+    - name: Contar las líneas del volcado
+      ansible.builtin.command:
+        cmd: "wc -l {{ area }}/ps_aux_reto.txt {{ area }}/top_cabecera.txt"
+      changed_when: false
+      register: conteo
+
+    - name: Mostrar la misión
+      ansible.builtin.debug:
+        msg:
+          - "==============================================================="
+          - "  Estación lista en:  datos/reto/     (abrí MISION.txt)"
+          - "  {{ conteo.stdout_lines | join('  |  ') }}"
+          - "---------------------------------------------------------------"
+          - "  Un servidor se cayó de madrugada. Sacá el diagnóstico de la"
+          - "  foto forense y armá la bandera con este formato EXACTO:"
+          - "      BANDERA{<pid_culpable>-<cantidad_zombies>-<numero_senal>}"
+          - ""
+          - "  R1) ¿Cuál es el PID del proceso que se comió la CPU?"
+          - "  R2) ¿Cuántos procesos quedaron en estado ZOMBIE?"
+          - "  R3) ¿Qué número de señal mandás PRIMERO para terminarlo ordenado?"
+          - ""
+          - "  Verificá tu bandera con Ansible (el repo NO la guarda en texto"
+          - "  plano, solo su huella SHA-256):"
+          - "     ansible-playbook comprobar_bandera.yml -e \"bandera=BANDERA{...}\""
+          - "==============================================================="

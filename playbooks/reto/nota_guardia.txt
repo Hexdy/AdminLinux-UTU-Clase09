@@ -1,0 +1,21 @@
+Nota de la guardia nocturna
+===========================
+
+A quien agarre el turno de la manana:
+
+  A las 02:15 el server empezo a no responder. Alcance a guardar la foto de
+  "ps aux" y la cabecera de "top" antes de que lo reiniciaran: quedaron en
+  ps_aux_reto.txt y top_cabecera.txt. El server ya no existe, asi que
+  trabajas sobre la foto. (De la cabecera de top no me entro la linea de
+  Tasks al copiar, perdon: los estados los vas a tener que contar del ps.)
+
+  Un companero me dijo "de memoria" que el culpable era el PID 1344 y que
+  habian quedado 2 procesos zombie. NO le creas de memoria: conta vos sobre
+  el volcado. Aca se verifica antes de confiar, y lo mismo vale para lo que
+  te sugiera una IA.
+
+  Ojo con los procesos en estado D: estan esperando al disco, NO se arreglan
+  con kill -9 y no son el culpable de esto.
+
+Esta nota quedo en 0600 (solo la lee su duenio) a proposito: asi se maneja un
+archivo con algo de valor. Security by design, desde el primer dia.

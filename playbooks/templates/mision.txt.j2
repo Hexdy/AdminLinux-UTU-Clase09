@@ -1,0 +1,38 @@
+===============================================================
+  MISIÓN — Post-mortem del incidente  ·  AdminLinux Clase 9
+===============================================================
+Estación : {{ ansible_hostname }}
+Distro   : {{ ansible_distribution }} {{ ansible_distribution_version | default('') }} ({{ ansible_os_family }})
+Gestor   : {{ 'apt' if ansible_os_family == 'Debian' else ('pacman' if ansible_os_family == 'Archlinux' else 'dnf') }}
+
+Sos el/la SRE de guardia del turno de la mañana. Un servidor se cayó de
+madrugada y ya lo reiniciaron: el sistema vivo NO existe más. Lo único que
+tenés es la foto forense que alcanzó a guardar la guardia nocturna:
+
+  - ps_aux_reto.txt   (el volcado de "ps aux" del momento del incidente:
+                       USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND)
+  - top_cabecera.txt  (la cabecera de "top": load average, %Cpu y memoria)
+  - nota_guardia.txt  (la nota que te dejaron — está en 0600, leela igual)
+
+Tenés que sacar 3 datos para el post-mortem:
+
+  R1) ¿Cuál es el PID del proceso que se comió la CPU?
+  R2) ¿Cuántos procesos quedaron en estado ZOMBIE?
+  R3) ¿Qué NÚMERO de señal mandás PRIMERO para terminarlo ordenado?
+
+Con las 3 respuestas armá la bandera, con este formato EXACTO:
+
+      BANDERA{<pid_culpable>-<cantidad_zombies>-<numero_senal>}
+
+Verificala con Ansible (no adivines: el playbook te dice si está bien):
+
+      ansible-playbook comprobar_bandera.yml -e "bandera=BANDERA{...}"
+
+Pistas:
+  - El encabezado del volcado se saltea con  NR>1  (o con  tail -n +2).
+  - %CPU es la columna 3 y STAT es la columna 8.
+  - Para ordenar por CPU:  sort -k3 -rn   (o  awk  sobre la columna 3).
+  - Un zombie tiene el STAT empezando con Z. Ojo: los D NO son zombies.
+  - El número de la señal "ordenada" lo viste en clase. Está en
+    docs/chuleta_procesos.md y también lo lista  kill -l.
+===============================================================
